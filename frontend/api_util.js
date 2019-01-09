@@ -32,10 +32,14 @@ const APIUtil = {
       url: "/users/search",
       data: queryVal,
       dataType: "json",
+      success: (res) => {
+        console.log(res);
+      },
       error: (e) => {
         console.log(e);
       },
       complete: (res) => {
+        console.log(res);
         return res;
       }
     });

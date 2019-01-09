@@ -11,9 +11,11 @@ class UsersSearch {
 
   handleInput() {
     this.searchInput.on('input', (e) => {
-      APIUtil.searchUsers($(e.currentTarget).val()).then(() => {
-        renderResults();
-      })
+      APIUtil.searchUsers($(e.currentTarget).val(), this.renderResults())
+      // .then((res) => {
+      //   // console.log('working', res);
+      //   // 
+      // })
     })
   }
   renderResults() {
