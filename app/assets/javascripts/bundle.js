@@ -120,6 +120,20 @@ const APIUtil = {
         return res;
       }
     });
+  },
+  searchUsers: (queryVal, success) => {
+    return $.ajax({
+      type: "get",
+      url: "/users/search",
+      data: queryVal,
+      dataType: "json",
+      error: (e) => {
+        console.log(e);
+      },
+      complete: (res) => {
+        return res;
+      }
+    });
   }
 }
 
@@ -206,6 +220,7 @@ $(() => {
     new _follow_toggle__WEBPACK_IMPORTED_MODULE_0___default.a(el);
   })
   $('nav.users-search').each((idx, el) => {
+    console.log('running');
     new _users_search__WEBPACK_IMPORTED_MODULE_1___default.a(el);
   })
 })
@@ -217,13 +232,27 @@ $(() => {
   !*** ./frontend/users_search.js ***!
   \**********************************/
 /*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
+
+const APIUtil = __webpack_require__(/*! ./api_util.js */ "./frontend/api_util.js");
 
 class UsersSearch {
   constructor(el) {
     this.el = $(el);
-    this.searchInput = $(el).find('input');
-    this.usersUl = $(el).find('.users');
+    this.searchInput = $($(el).find('input')[0]);
+    this.usersUl = $($(el).find('.users')[0]);
+    this.handleInput();
+    console.log(this.searchInput);
+  }
+
+  handleInput() {
+    this.searchInput.on('input', (e) => {
+      APIUtil.searchUsers($(e.currentTarget).val()).then(() => {
+        renderResults();
+      })
+    })
+  }
+  renderResults() {
 
   }
 }

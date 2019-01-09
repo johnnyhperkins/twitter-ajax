@@ -6,6 +6,7 @@ $(() => {
     new FollowToggle(el);
   })
   $('nav.users-search').each((idx, el) => {
+    console.log('running');
     new UsersSearch(el);
   })
 })

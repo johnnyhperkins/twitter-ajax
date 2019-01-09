@@ -25,6 +25,20 @@ const APIUtil = {
         return res;
       }
     });
+  },
+  searchUsers: (queryVal, success) => {
+    return $.ajax({
+      type: "get",
+      url: "/users/search",
+      data: queryVal,
+      dataType: "json",
+      error: (e) => {
+        console.log(e);
+      },
+      complete: (res) => {
+        return res;
+      }
+    });
   }
 }
 
