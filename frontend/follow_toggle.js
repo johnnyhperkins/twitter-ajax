@@ -9,19 +9,20 @@ class FollowToggle {
   }
 
   render() {
-    return this.followState ? this.el.text('Follow!') : this.el.text('Unfollow');
+    return this.followState ? this.el.text('Unfollow') : this.el.text('Follow!');
   }
 
   handleClick(e) {
     this.el.on('click', (e) => {
       e.preventDefault();
       $.ajax({
-        type: this.followState ? "POST" : "DELETE",
-        url: "/users/:id/follow",
+        type: this.followState ? "DELETE" : "POST",
+        url: `/users/${this.userId}/follow`,
         dataType: "json",
         success: function (response) {
           console.log(response);
-          // this.followState = 
+          this.followState = this.followState ? true : false;
+          this.render();
         },
         error: (e) => {
           console.log(e);
