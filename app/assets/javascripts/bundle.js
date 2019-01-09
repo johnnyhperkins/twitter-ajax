@@ -86,12 +86,55 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./frontend/api_util.js":
+/*!******************************!*\
+  !*** ./frontend/api_util.js ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+const APIUtil = {
+  followUser: (id) => {
+    $.ajax({
+      type: "POST",
+      url: `/users/${id}/follow`,
+      dataType: "json",
+      error: (e) => {
+        console.log(e);
+      },
+      complete: (res) => {
+        return res;
+      }
+    });
+
+  },
+  unfollowUser: (id) => {
+    $.ajax({
+      type: "DELETE",
+      url: `/users/${id}/follow`,
+      dataType: "json",
+      error: (e) => {
+        console.log(e);
+      },
+      complete: (res) => {
+        return res;
+      }
+    });
+  }
+}
+
+module.exports = APIUtil;
+
+/***/ }),
+
 /***/ "./frontend/follow_toggle.js":
 /*!***********************************!*\
   !*** ./frontend/follow_toggle.js ***!
   \***********************************/
 /*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
+
+const APIUtil = __webpack_require__(/*! ./api_util.js */ "./frontend/api_util.js");
 
 class FollowToggle {
   constructor(el) {
@@ -100,34 +143,44 @@ class FollowToggle {
     this.followState = $(el).data('initial-follow-state');
     this.handleClick();
     this.render();
-    
   }
 
   render() {
-    return this.followState ? this.el.text('Unfollow') : this.el.text('Follow!');
+    if(this.followState === "unfollowing" 
+        || this.followState === "following") {
+          this.el.attr('disabled', true)
+        } else {
+          this.el.attr('disabled', false)
+        }
+    return this.followState === 'followed' ? this.el.text('Unfollow') : this.el.text('Follow!');
   }
 
   handleClick(e) {
     this.el.on('click', (e) => {
       e.preventDefault();
-      $.ajax({
-        type: this.followState ? "DELETE" : "POST",
-        url: `/users/${this.userId}/follow`,
-        dataType: "json",
-        error: (e) => {
-          console.log(e);
-        },
-        complete: (res) => {
-          console.log(res);
+      if(this.followState === 'unfollowed') {
+        this.followState = 'following';
+        this.render()
+        APIUtil.followUser(this.userId).then((res) => {
+          this.followState = 'followed';
+          this.el.attr({'data-initial-follow-state': this.followState});
+          this.render();
+        })
+      } else {
+        this.followState = 'unfollowing';
+        this.render()
+        APIUtil.unfollowUser(this.userId).then((res) => {
           if(res.status === 200) {
-            this.followState = !this.followState;
+            this.followState = 'unfollowed';
             this.el.attr({'data-initial-follow-state': this.followState});
-            return this.render();
+            this.render();
           } else {
             console.log(res);
           }
-        }
-      });
+        })
+      }
+      
+      
     })
     
   }
