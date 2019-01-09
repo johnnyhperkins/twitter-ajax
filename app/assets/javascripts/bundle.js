@@ -114,20 +114,18 @@ class FollowToggle {
         type: this.followState ? "DELETE" : "POST",
         url: `/users/${this.userId}/follow`,
         dataType: "json",
-        success: function (response) {
-          this.followState = this.followState ? true : false;
-          console.log('success is running');
-        },
         error: (e) => {
           console.log(e);
         },
-        complete: () => {
-          console.log('complete is running');
-          console.log(this.render);
-          console.log(this.followState);
-          console.log(this.el.data('initial-follow-state'));
-          this.el.data('initial-follow-state', this.followState);
-          return this.render();
+        complete: (res) => {
+          console.log(res);
+          if(res.status === 200) {
+            this.followState = !this.followState;
+            this.el.attr({'data-initial-follow-state': this.followState});
+            return this.render();
+          } else {
+            console.log(res);
+          }
         }
       });
     })
