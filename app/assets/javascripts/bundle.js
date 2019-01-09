@@ -240,12 +240,15 @@ class UsersSearch {
 
   handleInput() {
     this.searchInput.on('input', (e) => {
-      APIUtil.searchUsers($(e.currentTarget).val(), this.renderResults);
+      APIUtil.searchUsers($(e.currentTarget).val(), this.renderResults.bind(this));
     })
   }
   renderResults(res) {
-    this.usersUl
-    console.log(res);
+    this.usersUl.empty();
+    res.forEach(res => {
+      const $li = $(`<li><a href="/users/${res.id}">${res.username}</a></li>`)
+      this.usersUl.append($li);
+    })
   }
 }
 
