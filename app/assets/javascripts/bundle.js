@@ -95,10 +95,39 @@
 
 class FollowToggle {
   constructor(el) {
+    this.el = $(el);
     this.userId = $(el).data('user-id');
     this.followState = $(el).data('initial-follow-state');
+    this.handleClick();
+    this.render();
+    
+  }
+
+  render() {
+    return this.followState ? this.el.text('Follow!') : this.el.text('Unfollow');
+  }
+
+  handleClick(e) {
+    this.el.on('click', (e) => {
+      e.preventDefault();
+      $.ajax({
+        type: this.followState ? "POST" : "DELETE",
+        url: "/users/:id/follow",
+        dataType: "json",
+        success: function (response) {
+          console.log(response);
+          // this.followState = 
+        },
+        error: (e) => {
+          console.log(e);
+        }
+      });
+    })
+    
   }
 }
+
+module.exports = FollowToggle;
 
 /***/ }),
 
@@ -114,6 +143,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _follow_toggle__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./follow_toggle */ "./frontend/follow_toggle.js");
 /* harmony import */ var _follow_toggle__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_follow_toggle__WEBPACK_IMPORTED_MODULE_0__);
 
+
+$(() => {
+  $('button.follow-toggle').each((idx, el) => {
+    new _follow_toggle__WEBPACK_IMPORTED_MODULE_0___default.a(el);
+  })
+})
 
 /***/ })
 
