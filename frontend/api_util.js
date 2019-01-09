@@ -6,9 +6,6 @@ const APIUtil = {
       dataType: "json",
       error: (e) => {
         console.log(e);
-      },
-      complete: (res) => {
-        return res;
       }
     });
 
@@ -20,9 +17,6 @@ const APIUtil = {
       dataType: "json",
       error: (e) => {
         console.log(e);
-      },
-      complete: (res) => {
-        return res;
       }
     });
   },
@@ -30,17 +24,13 @@ const APIUtil = {
     return $.ajax({
       type: "get",
       url: "/users/search",
-      data: queryVal,
+      data: "query=" + queryVal,
       dataType: "json",
       success: (res) => {
-        console.log(res);
+        return success(res)
       },
       error: (e) => {
         console.log(e);
-      },
-      complete: (res) => {
-        console.log(res);
-        return res;
       }
     });
   }

@@ -101,9 +101,6 @@ const APIUtil = {
       dataType: "json",
       error: (e) => {
         console.log(e);
-      },
-      complete: (res) => {
-        return res;
       }
     });
 
@@ -115,9 +112,6 @@ const APIUtil = {
       dataType: "json",
       error: (e) => {
         console.log(e);
-      },
-      complete: (res) => {
-        return res;
       }
     });
   },
@@ -125,17 +119,13 @@ const APIUtil = {
     return $.ajax({
       type: "get",
       url: "/users/search",
-      data: queryVal,
+      data: "query=" + queryVal,
       dataType: "json",
       success: (res) => {
-        console.log(res);
+        return success(res)
       },
       error: (e) => {
         console.log(e);
-      },
-      complete: (res) => {
-        console.log(res);
-        return res;
       }
     });
   }
@@ -246,20 +236,16 @@ class UsersSearch {
     this.searchInput = $($(el).find('input')[0]);
     this.usersUl = $($(el).find('.users')[0]);
     this.handleInput();
-    console.log(this.searchInput);
   }
 
   handleInput() {
     this.searchInput.on('input', (e) => {
-      APIUtil.searchUsers($(e.currentTarget).val(), this.renderResults())
-      // .then((res) => {
-      //   // console.log('working', res);
-      //   // 
-      // })
+      APIUtil.searchUsers($(e.currentTarget).val(), this.renderResults);
     })
   }
-  renderResults() {
-
+  renderResults(res) {
+    this.usersUl
+    console.log(res);
   }
 }
 
