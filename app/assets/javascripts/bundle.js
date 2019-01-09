@@ -115,12 +115,19 @@ class FollowToggle {
         url: `/users/${this.userId}/follow`,
         dataType: "json",
         success: function (response) {
-          console.log(response);
           this.followState = this.followState ? true : false;
-          this.render();
+          console.log('success is running');
         },
         error: (e) => {
           console.log(e);
+        },
+        complete: () => {
+          console.log('complete is running');
+          console.log(this.render);
+          console.log(this.followState);
+          console.log(this.el.data('initial-follow-state'));
+          this.el.data('initial-follow-state', this.followState);
+          return this.render();
         }
       });
     })
