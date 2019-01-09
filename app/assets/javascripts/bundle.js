@@ -95,7 +95,7 @@
 
 const APIUtil = {
   followUser: (id) => {
-    $.ajax({
+    return $.ajax({
       type: "POST",
       url: `/users/${id}/follow`,
       dataType: "json",
@@ -109,7 +109,7 @@ const APIUtil = {
 
   },
   unfollowUser: (id) => {
-    $.ajax({
+    return $.ajax({
       type: "DELETE",
       url: `/users/${id}/follow`,
       dataType: "json",
@@ -146,13 +146,12 @@ class FollowToggle {
   }
 
   render() {
-    if(this.followState === "unfollowing" 
-        || this.followState === "following") {
-          this.el.attr('disabled', true)
+    if(this.followState === "unfollowing" || this.followState === "following") {
+          this.el.prop('disabled', true)
         } else {
-          this.el.attr('disabled', false)
+          this.el.prop('disabled', false)
         }
-    return this.followState === 'followed' ? this.el.text('Unfollow') : this.el.text('Follow!');
+    this.followState === 'followed' ? this.el.text('Unfollow') : this.el.text('Follow!');
   }
 
   handleClick(e) {
@@ -161,7 +160,7 @@ class FollowToggle {
       if(this.followState === 'unfollowed') {
         this.followState = 'following';
         this.render()
-        APIUtil.followUser(this.userId).then((res) => {
+        return APIUtil.followUser(this.userId).then(() => {
           this.followState = 'followed';
           this.el.attr({'data-initial-follow-state': this.followState});
           this.render();
@@ -169,14 +168,10 @@ class FollowToggle {
       } else {
         this.followState = 'unfollowing';
         this.render()
-        APIUtil.unfollowUser(this.userId).then((res) => {
-          if(res.status === 200) {
-            this.followState = 'unfollowed';
-            this.el.attr({'data-initial-follow-state': this.followState});
-            this.render();
-          } else {
-            console.log(res);
-          }
+        return APIUtil.unfollowUser(this.userId).then(() => {
+          this.followState = 'unfollowed';
+          this.el.attr({'data-initial-follow-state': this.followState});
+          this.render();
         })
       }
       
@@ -201,13 +196,39 @@ module.exports = FollowToggle;
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _follow_toggle__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./follow_toggle */ "./frontend/follow_toggle.js");
 /* harmony import */ var _follow_toggle__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_follow_toggle__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _users_search__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./users_search */ "./frontend/users_search.js");
+/* harmony import */ var _users_search__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_users_search__WEBPACK_IMPORTED_MODULE_1__);
+
 
 
 $(() => {
   $('button.follow-toggle').each((idx, el) => {
     new _follow_toggle__WEBPACK_IMPORTED_MODULE_0___default.a(el);
   })
+  $('nav.users-search').each((idx, el) => {
+    new _users_search__WEBPACK_IMPORTED_MODULE_1___default.a(el);
+  })
 })
+
+/***/ }),
+
+/***/ "./frontend/users_search.js":
+/*!**********************************!*\
+  !*** ./frontend/users_search.js ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+class UsersSearch {
+  constructor(el) {
+    this.el = $(el);
+    this.searchInput = $(el).find('input');
+    this.usersUl = $(el).find('.users');
+
+  }
+}
+
+module.exports = UsersSearch;
 
 /***/ })
 
